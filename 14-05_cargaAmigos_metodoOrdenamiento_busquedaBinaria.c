@@ -1,21 +1,38 @@
 #include <stdio.h>
-#include <string.h>  // para memcpy si prefieres
+#include <string.h>
+
+struct estructura_amigo {
+	char nombre[20];
+	char apellido[20];
+	char telefono[20];
+	int edad;
+	int dni;
+};
+
+// Función de búsqueda binaria por DNI
+int buscar_dni_binaria(struct estructura_amigo arr[], int tam, int dni_buscado) {
+	int izquierda = 0, derecha = tam - 1;
+	
+	while (izquierda <= derecha) {
+		int medio = (izquierda + derecha) / 2;
+		
+		if (arr[medio].dni == dni_buscado) {
+			return medio; // Devuelve la posición
+		} else if (arr[medio].dni < dni_buscado) {
+			izquierda = medio + 1;
+		} else {
+			derecha = medio - 1;
+		}
+	}
+	return -1; // No encontrado
+}
 
 int main() {
-	struct estructura_amigo {
-		char nombre[20];
-		char apellido[20];
-		char telefono[20];
-		int edad;
-		int dni;
-	};
-	
 	int elem = 0;
 	printf("Ingrese la cantidad de amigos: ");
 	scanf("%d", &elem);
 	getchar();  // limpia el '\n' residual
 	
-	// VLA (Variable-Length Array) en C99
 	struct estructura_amigo amigo[elem];
 	
 	// --- 1) Carga de datos ---
@@ -37,7 +54,6 @@ int main() {
 	for (int pass = 0; pass < elem - 1; pass++) {
 		for (int j = 0; j < elem - pass - 1; j++) {
 			if (amigo[j].dni > amigo[j + 1].dni) {
-				// intercambiar amigo[j] y amigo[j+1]
 				struct estructura_amigo tmp = amigo[j];
 				amigo[j] = amigo[j + 1];
 				amigo[j + 1] = tmp;
@@ -57,23 +73,17 @@ int main() {
 			   amigo[i].dni);
 	}
 	
-	
-	// --- 4) Búsqueda de persona por DNI ---
+	// --- 4) Búsqueda binaria de persona por DNI ---
 	int buscar_dni;
-	printf("\n\n--- Búsqueda de persona por DNI ---\n");
+	printf("\n\n--- Búsqueda de persona por DNI (Binaria) ---\n");
 	printf("Ingrese el DNI a buscar: ");
 	scanf("%d", &buscar_dni);
 	
-	int encontrado = 0;
-	for (int i = 0; i < elem; i++) {
-		if (amigo[i].dni == buscar_dni) {
-			printf("\nLa persona %s %s con DNI %d se encuentra en la base de datos (posición %d).\n",
-				   amigo[i].nombre, amigo[i].apellido, buscar_dni, i + 1);
-			encontrado = 1;
-			break;
-		}
-	}
-	if (!encontrado) {
+	int pos = buscar_dni_binaria(amigo, elem, buscar_dni);
+	if (pos != -1) {
+		printf("\nLa persona %s %s con DNI %d se encuentra en la base de datos (posición %d).\n",
+			   amigo[pos].nombre, amigo[pos].apellido, buscar_dni, pos + 1);
+	} else {
 		printf("\nLa persona con DNI %d NO se encuentra en la base de datos.\n", buscar_dni);
 	}
 	
@@ -81,7 +91,7 @@ int main() {
 	int c1 = 0, c2 = 0;
 	for (int i = 0; i < elem; i++) {
 		if (amigo[i].edad > 20) c1++;
-		else                c2++;
+		else                    c2++;
 	}
 	printf("\nHay %d menores de 20 años (incluidos) y %d mayores de 20 años.\n", c2, c1);
 	
