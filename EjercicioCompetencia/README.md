@@ -10,9 +10,11 @@
 
 ---
 
-## Número del ejercicio
+## Ejercicio N1 - 
 
-Ejercicio  - 
+### Objetivo
+
+El objetivo del ejercicio es
 
 ---
 
