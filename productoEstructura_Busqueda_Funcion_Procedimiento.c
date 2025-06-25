@@ -8,18 +8,23 @@ d) mostrar el contenido del arreglo de estructura
 
 #include <stdio.h>
 #define MAX 3
+
 struct Producto
 {
 	int codigo;
 	char nombre[20];
 	int stock;
 };
+
 void ordenarPorCodigo(struct Producto arr[], int n);
 void mostrarArreglo(struct Producto arr[], int n);
 int buscarPorCodigo(struct Producto arr[], int n, int codigo);
+
+
 int main() {
 	int i,busqueda,pos;
 	struct Producto p[MAX];
+	
 	for (i=0;i<MAX;i++){
 		printf("Ingresar el codigo del producto:");
 		scanf("%d",&p[i].codigo);
@@ -27,8 +32,13 @@ int main() {
 		scanf("%s",&p[i].nombre);
 		printf("Ingresar el stock del producto:");
 		scanf("%d",&p[i].stock);
+		printf("\n");
 	}
+	
+	//Mostramos las distintas estructuras como fueron ingresadas
 	mostrarArreglo(p, MAX);
+	
+	//Ahora ordenamos (Bubble Sort) y mostramos
 	ordenarPorCodigo(p, MAX);
 	printf("Ordenado por codigo\n");
 	mostrarArreglo(p, MAX);
@@ -38,6 +48,7 @@ int main() {
 	printf("\nIngrese el código a buscar: ");
 	scanf("%d", &busqueda);
 	
+	//Y por ultimo, buscamos con Busqueda Binaria
 	pos = buscarPorCodigo(p, MAX, busqueda);
 	
 	if (pos != -1) {
